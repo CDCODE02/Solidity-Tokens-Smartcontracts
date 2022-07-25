@@ -1,3 +1,7 @@
+/**
+ *Submitted for verification at BscScan.com on 2022-05-14
+*/
+
 // SPDX-License-Identifier: Unlicensed
 pragma solidity ^0.8.7;
 
@@ -357,7 +361,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 }
 
 
-contract MINIBINANCE is Context, IERC20, Ownable { 
+contract FANTALAND is Context, IERC20, Ownable { 
     using SafeMath for uint256;
     using Address for address;
 
@@ -374,24 +378,28 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     bool public noBlackList;
    
     /*
+
     WALLETS
+
     */
 
 
-    address payable private Marketing_Wallet = payable(0x5E22A4c787034499E03d00A9EF405a69d07e0Bb7);
+    address payable private Marketing_Wallet = payable(0x8E4565227CbCDf9dDD731eEa60c7e4D59dA09Eeb);
     address payable private Wallet_Burn = payable(0x000000000000000000000000000000000000dEaD); 
     address payable private Wallet_zero = payable(0x0000000000000000000000000000000000000000); 
 
 
     /*
+
     TOKEN DETAILS
+
     */
 
 
-    string private _name = "MTN BINANCE"; 
-    string private _symbol = "MNB";  
+    string private _name = "FANTLAND"; 
+    string private _symbol = "$FTL";  
     uint8 private _decimals = 9;
-    uint256 private _tTotal = 10000000000 * 10**9;
+    uint256 private _tTotal = 100000000 * 10**9;
     uint256 private _tFeeTotal;
 
     // Counter for liquify trigger
@@ -404,9 +412,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     // Setting the initial fees
-    uint256 private _TotalFee = 10;
-    uint256 public _buyFee = 5;
-    uint256 public _sellFee = 5;
+    uint256 private _TotalFee = 12;
+    uint256 public _buyFee = 6;
+    uint256 public _sellFee = 6;
 
 
     // 'Previous fees' are used to keep track of fee settings when removing and restoring fees
@@ -415,21 +423,24 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     uint256 private _previousSellFee = _sellFee; 
 
     /*
+
     WALLET LIMITS 
     
     */
 
-    // Max wallet holding (2% at launch)
-    uint256 public _maxWalletToken = _tTotal.mul(2).div(100);
+    // Max wallet holding (10% at launch)
+    uint256 public _maxWalletToken = _tTotal.mul(10).div(100);
     uint256 private _previousMaxWalletToken = _maxWalletToken;
 
 
-    // Maximum transaction amount (1% at launch)
-    uint256 public _maxTxAmount = _tTotal.mul(1).div(100); 
+    // Maximum transaction amount (7% at launch)
+    uint256 public _maxTxAmount = _tTotal.mul(7).div(100); 
     uint256 private _previousMaxTxAmount = _maxTxAmount;
 
     /* 
+
     PANCAKESWAP SET UP
+
     */
                                      
     IUniswapV2Router02 public uniswapV2Router;
@@ -452,25 +463,13 @@ contract MINIBINANCE is Context, IERC20, Ownable {
         inSwapAndLiquify = false;
     }
 
-    bool _transferStatus = true;
-
-    /** Disable transfer if enabled **/
-    function disableTransfer() public {
-        require(_transferStatus == true, "Transfer is already disabled");
-        _transferStatus = false;
-    }
-
-    /** Enable transfer if disabled **/
-    function enableTransfer() public {
-        require(_transferStatus == false, "Transfer is already enabled");
-        _transferStatus = true;
-    }
-
-
     /*
+
     DEPLOY TOKENS TO OWNER
+
     Constructor functions are only called once. This happens during contract deployment.
     This function deploys the total token supply to the owner wallet and creates the PCS pairing
+
     */
     
     constructor () {
@@ -492,7 +491,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     STANDARD ERC20 COMPLIANCE FUNCTIONS
+
     */
 
     function name() public view returns (string memory) {
@@ -516,7 +517,6 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     }
 
     function transfer(address recipient, uint256 amount) public override returns (bool) {
-        require(_transferStatus == true, "Transfer has been disabled for this contract!");
         _transfer(_msgSender(), recipient, amount);
         return true;
     }
@@ -548,14 +548,18 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     END OF STANDARD ERC20 COMPLIANCE FUNCTIONS
+
     */
 
 
 
 
     /*
+
     FEES
+
     */
     
     // Set a wallet address so that it does not have to pay transaction fees
@@ -570,9 +574,12 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     SETTING FEES
+
     Max total fee is limited to 20% (for buy and sell combined)
     Launch fees are set to 6% buy 6% sell
+
     */
     
 
@@ -594,7 +601,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     PROCESSING TOKENS - SET UP
+
     */
     
     // Toggle on and off to auto process tokens to BNB wallet 
@@ -616,10 +625,13 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     BLACKLIST 
+
     This feature is used to block a person from buying - known bot users are added to this
     list prior to launch. We also check for people using snipe bots on the contract before we
     add liquidity and block these wallets. We like all of our buys to be natural and fair.
+
     */
 
     // Blacklist - block wallets (ADD - COMMA SEPARATE MULTIPLE WALLETS)
@@ -658,10 +670,13 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     You can turn the blacklist restrictions on and off.
+
     During launch, it's a good idea to block known bot users from buying. But these are real people, so 
     when the contract is safe (and the price has increased) you can allow these wallets to buy/sell by setting
     noBlackList to false
+
     */
 
     // Blacklist Switch - Turn on/off blacklisted wallet restrictions 
@@ -673,6 +688,7 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     /*
     
     When sending tokens to another wallet (not buying or selling) if noFeeToTransfer is true there will be no fee
+
     */
 
     bool public noFeeToTransfer = true;
@@ -686,14 +702,20 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     }
 
     /*
+
     WALLET LIMITS
+
     Wallets are limited in two ways. The amount of tokens that can be purchased in one transaction
     and the total amount of tokens a wallet can buy. Limiting a wallet prevents one wallet from holding too
     many tokens, which can scare away potential buyers that worry that a whale might dump!
+
     IMPORTANT
+
     Solidity can not process decimals, so to increase flexibility, we multiple everything by 100.
     When entering the percent, you need to shift your decimal two steps to the right.
+
     eg: For 4% enter 400, for 1% enter 100, for 0.25% enter 25, for 0.2% enter 20 etc!
+
     */
 
     // Set the Max transaction amount (percent of total supply)
@@ -749,7 +771,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
         
 
         /*
+
         TRANSACTION AND WALLET LIMITS
+
         */
         
 
@@ -771,7 +795,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
         /*
+
         BLACKLIST RESTRICTIONS
+
         */
         
         if (noBlackList){
@@ -783,7 +809,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
         /*
+
         PROCESSING
+
         */
 
 
@@ -807,10 +835,13 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
         /*
+
         REMOVE FEES IF REQUIRED
+
         Fee removed if the to or from address is excluded from fee.
         Fee removed if the transfer is NOT a buy or sell.
         Change fee amount for buy or sell.
+
         */
 
         
@@ -826,9 +857,12 @@ contract MINIBINANCE is Context, IERC20, Ownable {
 
 
     /*
+
     PROCESSING FEES
+
     Fees are added to the contract as tokens, these functions exchange the tokens for BNB and send to the wallet.
     One wallet is used for ALL fees. This includes liquidity, marketing, development costs etc.
+
     */
 
 
@@ -875,7 +909,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     }
 
     /*
+
     PURGE RANDOM TOKENS - Add the random token address and a wallet to send them to
+
     */
 
     // Remove random tokens from the contract and send to a wallet
@@ -890,6 +926,7 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     /*
     
     UPDATE PANCAKESWAP ROUTER AND LIQUIDITY PAIRING
+
     */
 
 
@@ -912,7 +949,9 @@ contract MINIBINANCE is Context, IERC20, Ownable {
     }
 
     /*
+
     TOKEN TRANSFERS
+
     */
 
     // Check if token transfer needs to process fees
@@ -946,4 +985,10 @@ contract MINIBINANCE is Context, IERC20, Ownable {
         uint256 tTransferAmount = tAmount.sub(tDev);
         return (tTransferAmount, tDev);
     }
+
+
+
+    
+
+
 }
