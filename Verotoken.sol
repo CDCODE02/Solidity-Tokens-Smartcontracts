@@ -361,7 +361,7 @@ interface IUniswapV2Router02 is IUniswapV2Router01 {
 }
 
 
-contract FANTALAND is Context, IERC20, Ownable { 
+contract VecnaInu is Context, IERC20, Ownable { 
     using SafeMath for uint256;
     using Address for address;
 
@@ -384,7 +384,7 @@ contract FANTALAND is Context, IERC20, Ownable {
     */
 
 
-    address payable private Marketing_Wallet = payable(0x8E4565227CbCDf9dDD731eEa60c7e4D59dA09Eeb);
+    address payable private Marketing_Wallet = payable(0xaDF0026E3A53e59367A46AcFA37D9E38266628F1);
     address payable private Wallet_Burn = payable(0x000000000000000000000000000000000000dEaD); 
     address payable private Wallet_zero = payable(0x0000000000000000000000000000000000000000); 
 
@@ -396,10 +396,10 @@ contract FANTALAND is Context, IERC20, Ownable {
     */
 
 
-    string private _name = "FANTLAND"; 
-    string private _symbol = "$FTL";  
+    string private _name = "Vecna Inu"; 
+    string private _symbol = "VINU";  
     uint8 private _decimals = 9;
-    uint256 private _tTotal = 100000000 * 10**9;
+    uint256 private _tTotal = 5000000000000000 * 10**9;
     uint256 private _tFeeTotal;
 
     // Counter for liquify trigger
@@ -412,9 +412,9 @@ contract FANTALAND is Context, IERC20, Ownable {
 
 
     // Setting the initial fees
-    uint256 private _TotalFee = 12;
-    uint256 public _buyFee = 6;
-    uint256 public _sellFee = 6;
+    uint256 private _TotalFee = 10;
+    uint256 public _buyFee = 5;
+    uint256 public _sellFee = 5;
 
 
     // 'Previous fees' are used to keep track of fee settings when removing and restoring fees
